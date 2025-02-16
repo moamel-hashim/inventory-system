@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS "BadgeTransaction" (
     "OfficerFirstName" VARCHAR(20) NOT NULL,
     "OfficerLastName" VARCHAR(20) NOT NULL,
     "ActionType" VARCHAR(20) NOT NULL CHECK ("ActionType" IN ('CheckOut', 'Return')),
-    "TempBadgeNumber" VARCHAR(20) NOT NULL,
+    "TempBadgeNumber" VARCHAR(20) NOT NULL CHECK (length("TempBadgeNumber") = 8),
     "TransactionDate" DATE NOT NULL,
     "TransactionTime" TIME NOT NULL,
     FOREIGN KEY ("FacilityID") REFERENCES "Facility"("facilityID")

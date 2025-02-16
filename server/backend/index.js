@@ -1,3 +1,5 @@
+'use strict';
+
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
@@ -16,14 +18,7 @@ app.use(express.json())
 // database connection
 
 const db = new Pool({
-  user: "postgres",
-  password: "",
-  host: "localhost",
-  port: "8080",
-  database: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  connectionString: process.env.DATABASE_URL,
 })
 
 
@@ -32,19 +27,39 @@ const db = new Pool({
 // add the total number of all temp cards//
 
 // add each temp badge identification number
-
-// get all temp badge identification number and the total amount
-
-app.get('/inventorySystems', async (req, res, next) => {
+app.get('/BadgeInventory', async(req, res, next) => {
   try {
     console.log(req.body);
-
+    res.send('badge inventory its working!')
+  } catch (err) {
+    console.error(err.message);
+  }
+})
+// get all temp badge identification number and the total amount
+app.get('/BadgeTransaction', async (req, res, next) => {
+  try {
+    console.log(req.body);
+    res.send('badge transaction its working!');
   } catch (err) {
     console.error(err.message);
   }
 })
 
+// get facility information
+app.get('/Facility', async (req, res, next) => {
+  try {
+    const result = await db.query('SELECT * FROM "Facility"');
+    console.log('this is a console log for result value',result.rows);
+    res.json(result.rows);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({error: 'Internal server error'});
+  }
+});
+
+
 // port connection
-app.listen(process.env.PORT, () => {
+app.listen(process.env.DEV_SERVER_PORT, () => {
   console.log('server has started on port 8080');
 })
