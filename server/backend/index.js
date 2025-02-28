@@ -24,24 +24,39 @@ const db = new Pool({
 
 //ROUTES//
 
-// add the total number of all temp cards//
 
-// add each temp badge identification number
-app.get('/BadgeInventory', async(req, res, next) => {
+//post information to the badge transaction system
+
+
+app.post('/BadgeTransaction', async(req, res, next) => {
   try {
     console.log(req.body);
-    res.send('badge inventory its working!')
   } catch (err) {
     console.error(err.message);
   }
 })
-// get all temp badge identification number and the total amount
-app.get('/BadgeTransaction', async (req, res, next) => {
+
+// get all badges inventory
+app.get('/BadgeInventory', async(req, res, next) => {
   try {
-    console.log(req.body);
-    res.send('badge transaction its working!');
+    const result = await db.query('SELECT *  FROM "BadgeInventory"');
+    console.log('this is a console log for BadgeInventory result value', result.rows);
+    res.json(result.rows);
   } catch (err) {
     console.error(err.message);
+  }
+})
+
+
+// get badge transaction history
+app.get('/BadgeTransaction', async (req, res, next) => {
+  try {
+    const result = await db.query('SELECT * FROM "BadgeTransaction"');
+    console.log('this is a console log for BadgeTransaction result value', result.rows);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({error: 'internal server error'});
   }
 })
 
